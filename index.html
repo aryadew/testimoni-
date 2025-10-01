@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimoni - NAMA STORE</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://ar-hosting.pages.dev/1756674212575.jpg" alt="Logo CILL" class="logo">
+        </div>
+        <h1>CILL</h1>
+        <p class="bio">WEB KUSUS TESTIMONI BY CILL</p>
+        ALL INFO CILL </P>
+        087763037287 (KENON MANEN) </p>
+    </header>
+
+    <div class="running-text-container">
+        <p class="running-text">
+​🔒 DEMI KEAMANAN PRIVASI, SEMUA INFORMASI PRIBADI (WA / NOMOR REKENING) KAMI SENSOR. TERIMA KASIH ATAS PENGERTIANNYA
+        </p>
+    </div>
+    
+    <main class="container">
+        <h2 class="section-title">ALL TESTIMONI</h2>
+
+        <div class="controls-bar">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Cari testimoni (mis:REKBER 81 INC)">
+                <button id="search-button">🔍</button>
+            </div>
+            
+            <div class="sort-container">
+                <label for="sort-select">Urutkan:</label>
+                <select id="sort-select">
+                    <option value="newest">Tanggal Terbaru</option>
+                    <option value="oldest">Tanggal Terlama</option>
+                    <option value="desc_asc">Deskripsi (A-Z)</option>
+                    <option value="desc_desc">Deskripsi (Z-A)</option>
+                </select>
+            </div>
+        </div>
+
+        <p id="no-results" class="no-results-message" style="display:none;">
+            😢 Maaf, tidak ada testimoni yang cocok dengan kata kunci Anda.
+        </p>
+
+        <div class="testimoni-grid" id="testimoni-grid">
+            </div>
+        
+        <div class="pagination-controls" id="pagination-controls">
+            </div>
+
+    </main>
+
+    <div id="testimoni-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 id="modal-desc"></h3>
+            
+            <div class="modal-images-container">
+                
+                <button class="nav-btn prev-btn" id="prev-btn">&#10094;</button> 
+
+                <div class="modal-images" id="modal-image-slider">
+                    <div class="image-wrapper slide-page" data-page="1">
+                        <p class="image-label">BUKTI TRANSFER</p>
+                        <img id="modal-img-tf" data-src="" alt="Bukti Transfer" loading="lazy">
+                        <div class="image-error-placeholder" id="error-tf" style="display:none;">
+                            <span class="error-icon">&#10060;</span>
+                            <p>Gambar Gagal Dimuat</p>
+                        </div>
+                    </div>
+                    <div class="image-wrapper slide-page" data-page="2">
+                        <p class="image-label">BUKTI DONE</p>
+                        <img id="modal-img-done" data-src="" alt="Bukti Selesai" loading="lazy">
+                         <div class="image-error-placeholder" id="error-done" style="display:none;">
+                            <span class="error-icon">&#10060;</span>
+                            <p>Gambar Gagal Dimuat</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="nav-btn next-btn" id="next-btn">&#10095;</button>
+            
+            </div>
+            
+            <div class="slider-dots" id="slider-dots"></div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
