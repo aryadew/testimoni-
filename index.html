@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Sistem Setoran Harian RIPZ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: #333;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .form-input {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .table th {
+            background: #343a40;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        .image-preview {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid #ddd;
+            object-fit: cover;
+            transition: all 0.2s ease;
+        }
+        .image-preview:hover {
+            border-color: #007bff;
+            transform: scale(1.05);
+        }
+        .modal-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-image img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+        .hidden-element { display: none !important; }
+        .header {
+            background: white;
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #004085;
+        }
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .alert-danger {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .alert-success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-box.success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        .stat-box.danger {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        }
+        @media (max-width: 768px) {
+            .table { font-size: 0.85rem; }
+            .table th, .table td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="min-h-screen">
+    <!-- HEADER -->
+    <div class="header">
+        <div class="max-w-6xl mx-auto px-4">
+            <h1 class="text-3xl font-bold text-gray-800">
+                <i class="fas fa-money-bill-wave text-blue-600 mr-2"></i>STORAN RIPZZ
+            </h1>
+            <p class="text-gray-600 text-sm mt-2">
+                <i class="fas fa-calendar-alt mr-1"></i>Senin - Jumat · Deadline: <strong>18:00 WIB</strong> · Denda: <strong class="text-red-600">Rp 20.000</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+
+        <!-- LOGIN PANEL -->
+        <div id="loginPanel">
+            <div class="card p-8 max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-center mb-2">Selamat Datang</h2>
+                <p class="text-center text-gray-600 mb-8">Pilih akses sesuai peran Anda</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- User Login -->
+                    <div class="border border-blue-200 rounded-8px p-6 bg-blue-50">
+                        <h3 class="text-xl font-bold mb-2">👤 Login User</h3>
+                        <p class="text-sm text-gray-600 mb-6">Masukkan username Telegram Anda</p>
+                        
+                        <input 
+                            type="text" 
+                            id="telegramUsername" 
+                            placeholder="Username Telegram" 
+                            class="form-input mb-4"
+                        >
+                        <button 
+                            id="btnUserLogin" 
+                            class="w-full btn-primary"
+                        >
+                            <i class="fab fa-telegram mr-2"></i>Login Sebagai User
+                        </button>
+                    </div>
+
+                    <!-- Admin Login -->
+                    <div class="border border-purple-200 rounded-8px p-6 bg-purple-50">
+                        <h3 class="text-xl font-bold mb-2">🔐 Admin Access</h3>
+                        <p class="text-sm text-gray-600 mb-6">Khusus administrator</p>
+                        
+                        <input 
+                            type="text" 
+                            id="adminUsername" 
+                            placeholder="Username" 
+                            class="form-input mb-3"
+                            value="RIPZSETORAN"
+                        >
+                        <input 
+                            type="password" 
+                            id="adminPassword" 
+                            placeholder="Password" 
+                            class="form-input mb-4"
+                        >
+                        <button 
+                            id="btnAdminLogin" 
+                            class="w-full btn-primary"
+                        >
+                            <i class="fas fa-lock mr-2"></i>Login Admin
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD USER -->
+        <div id="userDashboard" class="hidden-element space-y-6">
+            <!-- Header User -->
+            <div class="flex justify-between items-center">
+                <div class="card p-4 flex items-center gap-3">
+                    <i class="fas fa-user-circle text-2xl text-blue-600"></i>
+                    <div>
+                        <p class="text-xs text-gray-500">PENGGUNA</p>
+                        <p class="text-lg font-bold text-gray-800" id="userNameDisplay">-</p>
+                    </div>
+                </div>
+                <button 
+                    id="logoutBtnUser" 
+                    class="btn-danger flex items-center gap-2"
+                >
+                    <i class="fas fa-sign-out-alt"></i>Keluar
+                </button>
+            </div>
+
+            <!-- Total Setoran -->
+            <div class="stat-box">
+                <i class="fas fa-wallet text-3xl mb-2 opacity-80"></i>
+                <p class="text-sm opacity-80 mb-1">Total Seluruh Setoran</p>
+                <p class="text-4xl font-bold" id="totalUserSetoran">Rp 0</p>
+            </div>
+
+            <!-- Form Setoran -->
+            <div class="card p-6">
+                <h3 class="section-title">
+                    <i class="fas fa-edit mr-2"></i>Form Setoran
+                </h3>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">Hari Setoran</label>
+                        <select id="hariSetoran" class="form-input">
+                            <option>Senin</option>
+                            <option>Selasa</option>
+                            <option>Rabu</option>
+                            <option>Kamis</option>
+                            <option>Jumat</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">Nominal Transfer (Rp)</label>
+                        <input 
+                            type="number" 
+                            id="nominalSetoran" 
+                            placeholder="Masukkan jumlah" 
+                            class="form-input" 
+                            min="0" 
+                            value="0"
+                        >
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">Bukti Transfer</label>
+                        <input 
+                            type="file" 
+                            id="buktiTransfer" 
+                            accept="image/jpeg,image/png,image/jpg" 
+                            class="form-input"
+                        >
+                        <div id="previewBukti" class="hidden-element mt-3">
+                            <img id="previewImg" class="image-preview">
+                        </div>
+                    </div>
+
+                    <div id="infoDendaPanel" class="alert-warning">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <span id="infoDendaText">Status denda akan ditampilkan otomatis</span>
+                    </div>
+
+                    <button 
+                        id="btnSubmitSetoran" 
+                        class="w-full btn-success flex items-center justify-center gap-2"
+                    >
+                        <i class="fas fa-paper-plane"></i>Kirim Setoran
+                    </button>
+                </div>
+            </div>
+
+            <!-- Riwayat Setoran -->
+            <div class="card p-6">
+                <h3 class="section-title">
+                    <i class="fas fa-history mr-2"></i>Riwayat Setoran
+                </h3>
+                
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Hari</th>
+                                <th>Nominal</th>
+                                <th>Denda</th>
+                                <th>Total</th>
+                                <th>Bukti</th>
+                                <th>Waktu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="riwayatUserTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD ADMIN -->
+        <div id="adminDashboard" class="hidden-element space-y-6">
+            <!-- Header Admin -->
+            <div class="flex justify-between items-center">
+                <div class="card p-4 flex items-center gap-3">
+                    <i class="fas fa-shield-alt text-2xl text-purple-600"></i>
+                    <div>
+                        <p class="text-xs text-gray-500">STATUS</p>
+                        <p class="text-lg font-bold text-gray-800">Admin Control Center</p>
+                    </div>
+                </div>
+                <button 
+                    id="logoutBtnAdmin" 
+                    class="btn-danger flex items-center gap-2"
+                >
+                    <i class="fas fa-power-off"></i>Logout
+                </button>
+            </div>
+
+            <!-- Daftar User -->
+            <div class="card p-6">
+                <h3 class="section-title">
+                    <i class="fas fa-users mr-2"></i>Daftar User Telegram
+                </h3>
+
+                <div class="flex gap-2 mb-6">
+                    <input 
+                        type="text" 
+                        id="newUsername" 
+                        placeholder="Username Telegram" 
+                        class="form-input flex-1"
+                    >
+                    <button 
+                        id="btnAddUser" 
+                        class="btn-success"
+                    >
+                        <i class="fas fa-plus"></i>Tambah
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Ditambahkan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userListTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Monitoring -->
+            <div class="card p-6">
+                <h3 class="section-title">
+                    <i class="fas fa-search mr-2"></i>Monitoring Setoran
+                </h3>
+
+                <div class="flex gap-2 mb-6">
+                    <input 
+                        type="date" 
+                        id="monitoringDate" 
+                        class="form-input flex-1"
+                    >
+                    <button 
+                        id="btnCekBelumSetor" 
+                        class="btn-primary"
+                    >
+                        <i class="fas fa-check"></i>Cek
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="stat-box">
+                        <p class="text-sm opacity-80">Total User</p>
+                        <p class="text-3xl font-bold" id="totalUserCount">0</p>
+                    </div>
+                    <div class="stat-box success">
+                        <p class="text-sm opacity-80">Sudah Setor</p>
+                        <p class="text-3xl font-bold" id="sudahSetorCount">0</p>
+                    </div>
+                    <div class="stat-box danger">
+                        <p class="text-sm opacity-80">Belum Setor</p>
+                        <p class="text-3xl font-bold" id="belumSetorCount">0</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="unsetoredTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Filter & Total -->
+            <div class="card p-6">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">Filter Hari</label>
+                        <select id="filterHariAdmin" class="form-input md:w-48">
+                            <option value="all">Semua Hari</option>
+                            <option>Senin</option>
+                            <option>Selasa</option>
+                            <option>Rabu</option>
+                            <option>Kamis</option>
+                            <option>Jumat</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase mb-2">Total Denda</p>
+                        <p class="text-3xl font-bold text-red-600" id="totalDendaAdmin">Rp 0</p>
+                    </div>
+                    <button 
+                        id="refreshAdminBtn" 
+                        class="btn-primary"
+                    >
+                        <i class="fas fa-sync"></i>Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabel Setoran -->
+            <div class="card overflow-hidden">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="section-title">
+                        <i class="fas fa-list mr-2"></i>Daftar Semua Setoran
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Hari</th>
+                                <th>Nominal</th>
+                                <th>Denda</th>
+                                <th>Total</th>
+                                <th>Bukti</th>
+                                <th>Waktu</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const STORAGE_SETORAN = "sistem_setoran_harian";
+    const STORAGE_USERS = "telegram_allowed_users";
+    
+    let setoranList = [];
+    let allowedUsers = [];
+    let currentUser = null;
+
+    function saveSetoranToLocal() { localStorage.setItem(STORAGE_SETORAN, JSON.stringify(setoranList)); }
+    function loadSetoranData() { const stored = localStorage.getItem(STORAGE_SETORAN); setoranList = stored ? JSON.parse(stored) : []; }
+    
+    function saveUsersToLocal() { localStorage.setItem(STORAGE_USERS, JSON.stringify(allowedUsers)); }
+    function loadUsersData() {
+        const stored = localStorage.getItem(STORAGE_USERS);
+        if(stored) allowedUsers = JSON.parse(stored);
+        else {
+            allowedUsers = [
+                { username: "aryareall", createdAt: new Date().toISOString() },
+                { username: "budi_telegram", createdAt: new Date().toISOString() }
+            ];
+            saveUsersToLocal();
+        }
+    }
+
+    function isUserAllowed(username) {
+        return allowedUsers.some(u => u.username.toLowerCase() === username.toLowerCase());
+    }
+
+    // ========= PERBAIKAN UTAMA: Format tanggal berdasarkan waktu lokal =========
+    function formatDateFromTimestamp(timestamp) {
+        const d = new Date(timestamp);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function getDeadlineTimestamp(hariDipilih, tanggalSubmit) {
+        const map = { Senin:1, Selasa:2, Rabu:3, Kamis:4, Jumat:5 };
+        const target = map[hariDipilih];
+        if(!target) return null;
+        const submitDate = new Date(tanggalSubmit);
+        const current = submitDate.getDay();
+        let deadline = new Date(submitDate);
+        deadline.setHours(18,0,0,0);
+        if(target === current) return deadline.getTime();
+        let diff = target - current;
+        let targetDate = new Date(submitDate);
+        targetDate.setDate(submitDate.getDate() + diff);
+        targetDate.setHours(18,0,0,0);
+        return targetDate.getTime();
+    }
+
+    function hitungDenda(hari, waktuMilis) { 
+        const deadline = getDeadlineTimestamp(hari, waktuMilis); 
+        return (deadline && waktuMilis > deadline) ? 20000 : 0; 
+    }
+
+    function isHariMendatang(hari, tanggalRef) {
+        const map = { Senin:1, Selasa:2, Rabu:3, Kamis:4, Jumat:5 };
+        let current = tanggalRef.getDay();
+        current = current === 0 ? 7 : current;
+        return map[hari] > current;
+    }
+
+    function updateInfoDendaUser() {
+        const hari = document.getElementById("hariSetoran")?.value;
+        if(!hari) return;
+        const now = new Date();
+        const denda = hitungDenda(hari, now.getTime());
+        const span = document.getElementById("infoDendaText");
+        const panel = document.getElementById("infoDendaPanel");
+        const waktu = now.toLocaleTimeString('id-ID');
+        if(denda > 0) {
+            span.innerHTML = `<strong class="text-red-700">⚠️ DENDA BERLAKU!</strong> Rp 20.000 (Melewati 18:00 WIB) · ${waktu}`;
+            panel.classList.remove("alert-warning");
+            panel.classList.add("alert-danger");
+        } else {
+            span.innerHTML = `<strong class="text-green-700">✅ Tepat Waktu!</strong> Sebelum 18:00 WIB · ${waktu}`;
+            panel.classList.remove("alert-danger");
+            panel.classList.add("alert-warning");
+        }
+    }
+
+    function updateTotalUserSetoran() {
+        if(!currentUser || currentUser.role !== "user") return;
+        const total = setoranList.filter(s => s.username === currentUser.username).reduce((sum, s) => sum + (s.total || 0), 0);
+        document.getElementById("totalUserSetoran").innerHTML = `Rp ${total.toLocaleString()}`;
+    }
+
+    function renderUserRiwayat() {
+        const tbody = document.getElementById("riwayatUserTable");
+        if(!tbody) return;
+        const data = setoranList.filter(s => s.username === currentUser?.username);
+        if(data.length === 0) { 
+            tbody.innerHTML = `<td><td colspan="6" class="text-center py-8 text-gray-400">Belum ada setoran</td></tr>`; 
+            updateTotalUserSetoran(); 
+            return; 
+        }
+        tbody.innerHTML = data.map(s => `
+            <tr>
+                <td class="font-semibold">${s.hari}</td>
+                <td class="text-right">Rp ${s.jumlah.toLocaleString()}</td>
+                <td class="text-right text-red-600">${s.denda ? `Rp ${s.denda.toLocaleString()}` : '-'}</td>
+                <td class="text-right font-bold">Rp ${s.total.toLocaleString()}</td>
+                <td class="text-center"><img src="${s.bukti}" class="image-preview" onclick="previewGambar('${s.bukti.replace(/'/g, "\\'")}')" title="Klik untuk preview"></td>
+                <td class="text-xs text-gray-500">${s.tanggalStr}</td>
+            </tr>
+        `).join("");
+        updateTotalUserSetoran();
+    }
+    
+    // Perbaikan: gunakan localDate jika ada, fallback ke formatDateFromTimestamp yang sudah lokal
+    function cekBelumSetorByDate(dateStr) {
+        const usersSet = new Set();
+        setoranList.forEach(s => {
+            // Jika setoran lama tidak punya properti localDate, hitung ulang dari waktuSubmit
+            const submitDate = s.localDate || formatDateFromTimestamp(s.waktuSubmit);
+            if(submitDate === dateStr) {
+                usersSet.add(s.username);
+            }
+        });
+        const belum = allowedUsers.filter(u => !usersSet.has(u.username));
+        const sudah = allowedUsers.length - belum.length;
+        document.getElementById("totalUserCount").innerText = allowedUsers.length;
+        document.getElementById("sudahSetorCount").innerText = sudah;
+        document.getElementById("belumSetorCount").innerText = belum.length;
+        const tbody = document.getElementById("unsetoredTableBody");
+        if(!tbody) return;
+        if(belum.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="2" class="text-center py-8 text-green-600"><i class="fas fa-check-circle"></i> Semua user sudah setor pada ${dateStr}</td></tr>`;
+        } else {
+            tbody.innerHTML = belum.map(u => `
+                <tr>
+                    <td class="font-medium">${u.username}</td>
+                    <td class="text-right"><span class="badge badge-danger">Belum Setor</span></td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    function renderAdminTable() {
+        const filter = document.getElementById("filterHariAdmin").value;
+        let filtered = filter === "all" ? [...setoranList] : setoranList.filter(s => s.hari === filter);
+        const tbody = document.getElementById("adminTableBody");
+        if(filtered.length === 0) { 
+            tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-gray-400">Tidak ada data setoran</td></tr>`; 
+            document.getElementById("totalDendaAdmin").innerHTML = "Rp 0"; 
+            return; 
+        }
+        const totalDenda = filtered.reduce((sum, s) => sum + (s.denda || 0), 0);
+        document.getElementById("totalDendaAdmin").innerHTML = `Rp ${totalDenda.toLocaleString()}`;
+        tbody.innerHTML = filtered.map(s => `
+            <tr>
+                <td class="text-xs text-gray-500">#${s.id.toString().slice(0, 8)}</td>
+                <td class="font-semibold">${s.username}</td>
+                <td><span class="badge badge-success">${s.hari}</span></td>
+                <td class="text-right">Rp ${s.jumlah.toLocaleString()}</td>
+                <td class="text-right font-semibold text-red-600">${s.denda ? `Rp ${s.denda.toLocaleString()}` : '-'}</td>
+                <td class="text-right font-bold">Rp ${s.total.toLocaleString()}</td>
+                <td class="text-center"><img src="${s.bukti}" class="image-preview" onclick="previewGambar('${s.bukti.replace(/'/g, "\\'")}')" title="Klik untuk preview"></td>
+                <td class="text-xs text-gray-600">${s.tanggalStr}</td>
+                <td class="text-center">
+                    <button onclick="hapusSetoran(${s.id})" class="btn-danger">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+    }
+
+    function renderUserListAdmin() {
+        const tbody = document.getElementById("userListTable");
+        if(!tbody) return;
+        if(allowedUsers.length === 0) { 
+            tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-gray-400">Belum ada user terdaftar</td></tr>`; 
+            return; 
+        }
+        tbody.innerHTML = allowedUsers.map((u) => `
+            <tr>
+                <td class="font-medium">${u.username}</td>
+                <td class="text-sm text-gray-600">${new Date(u.createdAt).toLocaleDateString('id-ID')}</td>
+                <td class="text-center">
+                    <button onclick="hapusUser('${u.username.replace(/'/g, "\\'")}')" class="btn-danger">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+    }
+
+    window.hapusUser = function(username) {
+        if(confirm(`Hapus user "${username}"?`)) {
+            allowedUsers = allowedUsers.filter(u => u.username !== username);
+            saveUsersToLocal();
+            renderUserListAdmin();
+            // Refresh monitoring jika sedang aktif
+            const datePicker = document.getElementById("monitoringDate");
+            if(datePicker && datePicker.value) cekBelumSetorByDate(datePicker.value);
+        }
+    }
+
+    window.hapusSetoran = function(id) {
+        if(confirm("Hapus setoran ini?")) { 
+            setoranList = setoranList.filter(s => s.id !== id); 
+            saveSetoranToLocal(); 
+            renderAdminTable(); 
+            if(currentUser?.role === 'user') renderUserRiwayat(); 
+            // Refresh monitoring
+            const datePicker = document.getElementById("monitoringDate");
+            if(datePicker && datePicker.value) cekBelumSetorByDate(datePicker.value);
+        }
+    }
+
+    window.previewGambar = function(base64) {
+        const modal = document.createElement('div'); 
+        modal.className = "modal-image";
+        modal.innerHTML = `<img src="${base64}" alt="Bukti Transfer">`;
+        document.body.appendChild(modal); 
+        modal.onclick = () => modal.remove();
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape' && document.body.contains(modal)) modal.remove();
+        }, { once: true });
+    }
+
+    function submitSetoran() {
+        try {
+            if(!currentUser || currentUser.role !== "user") return alert("Akses ditolak");
+            const hari = document.getElementById("hariSetoran").value;
+            let jumlah = parseFloat(document.getElementById("nominalSetoran").value);
+            if(isNaN(jumlah)) jumlah = 0;
+            if(jumlah < 0) jumlah = 0;
+
+            const fileInput = document.getElementById("buktiTransfer");
+            if(!fileInput.files.length) return alert("Pilih file bukti transfer");
+            
+            const file = fileInput.files[0];
+            if(!file.type.startsWith('image/')) return alert("File harus berupa gambar");
+            if(file.size > 2 * 1024 * 1024) return alert("Ukuran file maksimal 2MB");
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const now = new Date();
+                if(isHariMendatang(hari, now)) return alert("Tidak bisa setor untuk hari yang belum tiba");
+                
+                const denda = hitungDenda(hari, now.getTime());
+                const total = jumlah + denda;
+                // Simpan tanggal lokal untuk memudahkan monitoring
+                const localDateStr = formatDateFromTimestamp(now.getTime());
+                
+                const newData = { 
+                    id: Date.now() + Math.random(), 
+                    username: currentUser.username, 
+                    hari, 
+                    jumlah, 
+                    denda, 
+                    total, 
+                    bukti: e.target.result, 
+                    waktuSubmit: now.getTime(), 
+                    tanggalStr: now.toLocaleString('id-ID'),
+                    localDate: localDateStr   // <-- PERBAIKAN: simpan tanggal lokal
+                };
+                setoranList.push(newData);
+                saveSetoranToLocal();
+                alert(`Setoran berhasil!\n\nNominal: Rp ${jumlah.toLocaleString()}${denda ? '\nDenda: Rp 20.000' : ''}\nTotal: Rp ${total.toLocaleString()}`);
+                document.getElementById("buktiTransfer").value = "";
+                document.getElementById("previewBukti").classList.add("hidden-element");
+                document.getElementById("nominalSetoran").value = "0";
+                renderUserRiwayat();
+            };
+            reader.readAsDataURL(file);
+        } catch(err) {
+            alert("Terjadi kesalahan: " + err.message);
+        }
+    }
+
+    function loginAsUser(telegramUsername) {
+        if(!telegramUsername.trim()) return alert("Masukkan username Telegram!");
+        if(!isUserAllowed(telegramUsername.trim())) return alert(`Username "${telegramUsername}" tidak terdaftar`);
+        
+        currentUser = { username: telegramUsername.trim(), role: "user" };
+        document.getElementById("loginPanel").classList.add("hidden-element");
+        document.getElementById("userDashboard").classList.remove("hidden-element");
+        document.getElementById("userNameDisplay").innerText = currentUser.username;
+        renderUserRiwayat();
+        updateInfoDendaUser();
+        document.getElementById("btnSubmitSetoran").onclick = submitSetoran;
+        document.getElementById("hariSetoran").onchange = updateInfoDendaUser;
+        document.getElementById("buktiTransfer").onchange = function(e) { 
+            if(e.target.files?.[0]) { 
+                const r = new FileReader(); 
+                r.onload = ev => { 
+                    document.getElementById("previewImg").src = ev.target.result; 
+                    document.getElementById("previewBukti").classList.remove("hidden-element"); 
+                }; 
+                r.readAsDataURL(e.target.files[0]); 
+            }
+        };
+    }
+
+    function loginAsAdmin(inputUser, inputPass) {
+        if(inputUser === "RIPZSETORAN" && inputPass === "RIPZ511") {
+            currentUser = { username: "admin", role: "admin" };
+            document.getElementById("loginPanel").classList.add("hidden-element");
+            document.getElementById("adminDashboard").classList.remove("hidden-element");
+            renderAdminTable();
+            renderUserListAdmin();
+            
+            const datePicker = document.getElementById("monitoringDate");
+            // Set default ke hari ini (lokal)
+            const todayLocal = formatDateFromTimestamp(Date.now());
+            if(!datePicker.value) datePicker.value = todayLocal;
+            cekBelumSetorByDate(datePicker.value);
+            
+            document.getElementById("filterHariAdmin").onchange = () => renderAdminTable();
+            document.getElementById("refreshAdminBtn").onclick = () => { 
+                renderAdminTable(); 
+                renderUserListAdmin(); 
+                if(document.getElementById("monitoringDate").value) 
+                    cekBelumSetorByDate(document.getElementById("monitoringDate").value);
+            };
+            document.getElementById("btnCekBelumSetor").onclick = () => cekBelumSetorByDate(document.getElementById("monitoringDate").value);
+            document.getElementById("monitoringDate").onchange = () => cekBelumSetorByDate(document.getElementById("monitoringDate").value);
+            
+            // Perbaikan tombol tambah user
+            document.getElementById("btnAddUser").onclick = () => {
+                const newUser = document.getElementById("newUsername").value.trim();
+                if(!newUser) return alert("Masukkan username telegram");
+                if(isUserAllowed(newUser)) return alert("User sudah terdaftar!");
+                allowedUsers.push({ username: newUser, createdAt: new Date().toISOString() });
+                saveUsersToLocal();
+                renderUserListAdmin();
+                document.getElementById("newUsername").value = "";
+                alert(`User "${newUser}" berhasil ditambahkan!`);
+                // Refresh monitoring setelah tambah user
+                if(document.getElementById("monitoringDate").value)
+                    cekBelumSetorByDate(document.getElementById("monitoringDate").value);
+            };
+        } else {
+            alert("Akses admin ditolak. Periksa kembali username dan password.");
+        }
+    }
+
+    function logout() {
+        currentUser = null;
+        document.getElementById("loginPanel").classList.remove("hidden-element");
+        document.getElementById("userDashboard").classList.add("hidden-element");
+        document.getElementById("adminDashboard").classList.add("hidden-element");
+        document.getElementById("telegramUsername").value = "";
+        document.getElementById("adminPassword").value = "";
+    }
+
+    document.getElementById("btnUserLogin").onclick = () => loginAsUser(document.getElementById("telegramUsername").value);
+    document.getElementById("btnAdminLogin").onclick = () => loginAsAdmin(document.getElementById("adminUsername").value, document.getElementById("adminPassword").value);
+    document.getElementById("logoutBtnUser")?.addEventListener("click", logout);
+    document.getElementById("logoutBtnAdmin")?.addEventListener("click", logout);
+
+    document.getElementById("telegramUsername")?.addEventListener("keypress", (e) => {
+        if(e.key === 'Enter') document.getElementById("btnUserLogin").click();
+    });
+    document.getElementById("adminPassword")?.addEventListener("keypress", (e) => {
+        if(e.key === 'Enter') document.getElementById("btnAdminLogin").click();
+    });
+
+    loadSetoranData();
+    loadUsersData();
+</script>
+</body>
+</html>
